@@ -1,0 +1,33 @@
+# --- OS & IDE Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# --- Laragon & Server Logs ---
+*.log
+access_log
+error_log
+.htaccess.backup
+
+# --- Dependencies (Library pihak ketiga) ---
+# Sebaiknya library ini dikelola via Bower/Composer, bukan disimpan di Git
+assets/bower_components/
+library/dompdf/
+
+# --- User Uploaded Content (Aset Dinamis) ---
+# Kita abaikan isinya, tapi tetap simpan foldernya
+gambar/bukti_pembayaran/*
+gambar/produk/*
+gambar/user/*
+
+# Kecualikan file index atau placeholder agar folder kosong tetap ter-track di Git
+!gambar/bukti_pembayaran/.gitkeep
+!gambar/produk/.gitkeep
+!gambar/user/.gitkeep
+
+# --- Temp & Caches ---
+assets/build/less/
+assets/build/scss/
+.cache/
