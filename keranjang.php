@@ -1,8 +1,9 @@
-<?php include 'header.php'; ?>
+<?php 
+session_start();
+include 'header.php'; 
+include 'koneksi.php';
+?>
 
-
-
-<!-- BREADCRUMB -->
 <div id="breadcrumb">
 	<div class="container">
 		<ul class="breadcrumb">
@@ -11,142 +12,111 @@
 		</ul>
 	</div>
 </div>
-<!-- /BREADCRUMB -->
-<!-- <pre>
-	<?php 
-	print_r($_SESSION); 
-	?>
-</pre> -->
-<!-- section -->
+
 <div class="section">
-	<!-- container -->
 	<div class="container">
-		<!-- row -->
 		<div class="row">
-			
 			<div class="col-md-12">
-				<form method="post" action="keranjang_update.php">
-					<div class="order-summary clearfix">
-						<div class="section-title">
-							<h3 class="title">Isi Keranjang Belanja</h3>
-						</div>
+				<div class="order-summary clearfix">
+					<div class="section-title">
+						<h3 class="title">Isi Keranjang Belanja</h3>
+					</div>
 
-						<?php 
-						if(isset($_GET['alert'])){
-							if($_GET['alert'] == "keranjang_kosong"){
-								echo "<div class='alert alert-danger text-center'>Tidak bisa checkout, karena keranjang belanja masih kosong. <br/> Silahkan belanja terlebih dulu.</div>";
-							}
-						}
-						?>
-
-						<?php 
-						if(isset($_SESSION['keranjang'])){
-
-							$jumlah_isi_keranjang = count($_SESSION['keranjang']);
-
-							if($jumlah_isi_keranjang != 0){
-
-								?>
-
-
-								<table class="shopping-cart-table table">
-									<thead>
-										<tr>
-											<th>Produk</th>
-											<th></th>
-											<th class="text-center">Harga</th>
-											<th class="text-center">Jumlah</th>
-											<th class="text-center">Total Harga</th>
-											<th class="text-right"></th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<?php
-									// cek apakah produk sudah ada dalam keranjang
-										$jumlah_total = 0;
-										$total = 0;
-										for($a = 0; $a < $jumlah_isi_keranjang; $a++){
-											$id_produk = $_SESSION['keranjang'][$a]['produk'];
-											$jml = $_SESSION['keranjang'][$a]['jumlah'];
-
-											$isi = mysqli_query($koneksi,"select * from produk where produk_id='$id_produk'");
-											$i = mysqli_fetch_assoc($isi);
-
-											$total += $i['produk_harga']*$jml;
-											$jumlah_total += $total;
-											?>
-
-											<tr>
-												<td class="thumb">
-													<?php if($i['produk_foto1'] == ""){ ?>
-														<img src="gambar/sistem/produk.png">
-													<?php }else{ ?>
-														<img src="gambar/produk/<?php echo $i['produk_foto1'] ?>">
-													<?php } ?>
-												</td>
-												<td class="details">
-													<a href="produk_detail.php?id=<?php echo $i['produk_id'] ?>"><?php echo $i['produk_nama'] ?></a>
-												<!-- <ul>
-													<li><span>Size: XL</span></li>
-													<li><span>Color: Camelot</span></li>
-												</ul> -->
-											</td>
-											<td class="price text-center"><strong><?php echo "Rp. ".number_format($i['produk_harga']) . " ,-"; ?></strong></td>
-											<td class="qty text-center">
-												<input class="harga" id="harga_<?php echo $i['produk_id'] ?>" type="hidden" value="<?php echo $i['produk_harga']; ?>">
-												<input name="produk[]" value="<?php echo $i['produk_id'] ?>" type="hidden">
-												<input class="input jumlah" name="jumlah[]" id="jumlah_<?php echo $i['produk_id'] ?>" nomor="<?php echo $i['produk_id'] ?>" type="number" value="<?php echo $_SESSION['keranjang'][$a]['jumlah']; ?>" min="1">
-											</td>
-											<td class="total text-center"><strong class="primary-color total_harga" id="total_<?php echo $i['produk_id'] ?>"><?php echo "Rp. ".number_format($total) . " ,-"; ?></strong></td>
-											<td class="text-right"><a class="main-btn icon-btn" href="keranjang_hapus.php?id=<?php echo $i['produk_id']; ?>&redirect=keranjang"><i class="fa fa-close"></i></a></td>
-										</tr>
-
-										<?php
-										$total = 0;
-
-									}
-
-									?>
-
-								</tbody>
-								<tfoot>
-									<tr>
-										<th class="empty" colspan="3"></th>
-										<th>TOTAL</th>
-										<th colspan="2" class="sub-total"><?php echo "Rp. ".number_format($jumlah_total) . " ,-"; ?></th>
-									</tr>
-								</tfoot>
-							</table>
-
-							<div class="pull-right">
-								<input type="submit" class="main-btn" value="Update Keranjang">
-								<a class="primary-btn" href="checkout.php">Check Out</a>
-							</div>
-							<?php
-						}else{
-
-							echo "<br><br><br><h3><center>Keranjang Masih Kosong. Yuk <a href='index.php'>belanja</a> !</center></h3><br><br><br>";
-						}
-
-
-					}else{
-						echo "<br><br><br><h3><center>Keranjang Masih Kosong. Yuk <a href='index.php'>belanja</a> !</center></h3><br><br><br>";
-					}
+					<?php 
+					// DEBUG: Lihat isi session (hapus nanti)
+					// echo "<pre>"; print_r($_SESSION['keranjang']); echo "</pre>";
 					?>
 
+					<?php 
+					if(isset($_SESSION['keranjang']) && count($_SESSION['keranjang']) > 0){
+						$total_keseluruhan = 0;
+					?>
+						<table class="shopping-cart-table table table-bordered">
+							<thead>
+								<tr>
+									<th>Produk</th>
+									<th>Nama Produk</th>
+									<th class="text-center">Harga</th>
+									<th class="text-center">Jumlah</th>
+									<th class="text-center">Subtotal</th>
+									<th class="text-center">Aksi</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								foreach($_SESSION['keranjang'] as $key => $item){
+									$id_produk = $item['produk'];
+									$jml = $item['jumlah'];
+									
+									$query = mysqli_query($koneksi, "SELECT * FROM produk WHERE produk_id='$id_produk'");
+									if(mysqli_num_rows($query) > 0){
+										$i = mysqli_fetch_assoc($query);
+										$subtotal = $i['produk_harga'] * $jml;
+										$total_keseluruhan += $subtotal;
+										
+										$foto = ($i['produk_foto1'] != "") ? "gambar/produk/".$i['produk_foto1'] : "gambar/sistem/produk.png";
+								?>
+										<tr id="row_<?php echo $key; ?>">
+											<td width="80">
+												<img src="<?php echo $foto; ?>" style="width: 60px; height: 60px; object-fit: cover;">
+											</td>
+											<td>
+												<a href="produk_detail.php?id=<?php echo $i['produk_id']; ?>">
+													<?php echo $i['produk_nama']; ?>
+												</a>
+											</td>
+											<td class="text-center">
+												Rp <?php echo number_format($i['produk_harga'], 0, ',', '.'); ?>
+											</td>
+											<td class="text-center">
+												<form action="keranjang_update.php" method="post" style="display: inline-block;">
+													<input type="hidden" name="key" value="<?php echo $key; ?>">
+													<input type="hidden" name="id" value="<?php echo $i['produk_id']; ?>">
+													<input type="number" name="jumlah" value="<?php echo $jml; ?>" min="1" max="<?php echo $i['produk_jumlah']; ?>" style="width: 70px; text-align: center;">
+													<button type="submit" class="btn btn-sm btn-primary">Update</button>
+												</form>
+											</td>
+											<td class="text-center">
+												Rp <?php echo number_format($subtotal, 0, ',', '.'); ?>
+											</td>
+											<td class="text-center">
+												<a href="keranjang_hapus.php?id=<?php echo $i['produk_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Hapus produk ini?')">
+													<i class="fa fa-trash"></i> Hapus
+												</a>
+											</td>
+										</tr>
+								<?php 
+									}
+								}
+								?>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="4" class="text-right"><strong>GRAND TOTAL</strong></td>
+									<td class="text-center"><strong>Rp <?php echo number_format($total_keseluruhan, 0, ',', '.'); ?></strong></td>
+									<td></td>
+								</tr>
+							</tfoot>
+						</table>
+
+						<div class="pull-right">
+							<a href="index.php" class="btn btn-default">Lanjutkan Belanja</a>
+							<a href="checkout.php" class="btn btn-primary">Checkout</a>
+						</div>
+					<?php 
+					} else { 
+					?>
+						<div class="alert alert-info text-center">
+							<h3>Keranjang Masih Kosong</h3>
+							<p>Yuk <a href="index.php">belanja</a> dulu!</p>
+						</div>
+					<?php 
+					}
+					?>
 				</div>
-			</form>
-
+			</div>
 		</div>
-
 	</div>
-	<!-- /row -->
 </div>
-<!-- /container -->
-</div>
-<!-- /section -->
-
-
 
 <?php include 'footer.php'; ?>

@@ -1,322 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<title>Fresh Cart - Toko Bahan Pangan Segar</title>
-
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
-
 	<link type="text/css" rel="stylesheet" href="frontend/css/bootstrap.min.css" />
-
 	<link type="text/css" rel="stylesheet" href="frontend/css/slick.css" />
 	<link type="text/css" rel="stylesheet" href="frontend/css/slick-theme.css" />
-
-	<link type="text/css" rel="stylesheet" href="frontend/css/nouislider.min.css" />
-
 	<link rel="stylesheet" href="frontend/css/font-awesome.min.css">
-
 	<link type="text/css" rel="stylesheet" href="frontend/css/style.css" />
-
 	<style>
-		/* FRESH CART GREEN THEME & LAYOUT OVERRIDES (Mencocokkan Gambar Template) */
-		:root {
-			--primary-green: #78B817; /* Hijau segar sesuai gambar */
-			--dark-text: #333;
-			--light-bg: #f9f9f9;
-		}
-
-		body {
-			font-family: 'Hind', sans-serif;
-			color: #555;
-			background-color: #fff;
-		}
-
-		/* Header & Navigasi */
-		#header {
-			padding: 20px 0;
-			border-bottom: 1px solid #eee;
-		}
-
-		.header-logo {
-			display: inline-block;
-			vertical-align: middle;
-			margin-right: 30px;
-		}
-
-		.header-logo .logo img {
-			max-height: 45px;
-			width: auto;
-		}
-
-		.header-search {
-			display: inline-block;
-			vertical-align: middle;
-			width: 400px;
-		}
-
-		.header-search form .input {
-			border-radius: 40px 0 0 40px;
-			border: 1px solid #ddd;
-			padding-left: 20px;
-		}
-
-		.header-search form .search-btn {
-			background-color: var(--primary-green);
-			border-radius: 0 40px 40px 0;
-			color: #fff;
-			width: 60px;
-		}
-
-		#navigation {
-			background-color: #fff;
-			border-bottom: 1px solid #eee;
-		}
-
-		.category-nav .category-header {
-			background-color: var(--primary-green);
-			font-weight: 700;
-		}
-
-		.menu-nav .menu-list > li > a {
-			color: var(--dark-text);
-			font-weight: 600;
-			text-transform: uppercase;
-			font-size: 13px;
-		}
-
-		.menu-nav .menu-list > li > a:hover, .menu-nav .menu-list > li.active > a {
-			color: var(--primary-green);
-		}
-
-		/* Tombol & Elemen UI Warna Hijau */
-		.primary-btn {
-			background-color: var(--primary-green);
-			border-radius: 40px;
-			text-transform: uppercase;
-			font-weight: 700;
-			border: none;
-		}
-
-		.primary-btn:hover {
-			background-color: #669e12;
-		}
-
-		.main-btn:hover {
-			color: var(--primary-green);
-			border-color: var(--primary-green);
-		}
-
-		.header-btns .header-btns-icon {
-			color: var(--dark-text);
-		}
-
-		.qty {
-			background-color: var(--primary-green);
-		}
-
-		/* Produk */
-		.product.product-single {
-			border: 1px solid #eee;
-			border-radius: 8px;
-			transition: all 0.3s;
-		}
-
-		.product.product-single:hover {
-			box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-			border-color: var(--primary-green);
-		}
-
-		.product-price {
-			color: var(--primary-green);
-			font-weight: 700;
-		}
-
-		.product-name a {
-			color: var(--dark-text);
-			font-weight: 600;
-		}
-
-		.product-name a:hover {
-			color: var(--primary-green);
-		}
-
-		@media only screen and (max-width: 991px) {
-			.header-search {
-				width: 100%;
-				margin: 15px 0;
-			}
-		}
+		:root { --primary-green: #78B817; --dark-text: #333; }
+		@media (min-width: 1200px) { .container { width: 95% !important; max-width: 1500px !important; } }
+		body { font-family: 'Hind', sans-serif; background-color: #fcfcfc; color: #444; }
+		#header { padding: 12px 0; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+		.header-flex { display: flex; align-items: center; justify-content: space-between; }
+		.hamburger-menu { display: none; font-size: 24px; cursor: pointer; color: var(--dark-text); margin-right: 15px; }
+		.header-logo img { max-height: 40px; width: auto; }
+		.header-search { flex: 1; margin: 0 40px; max-width: 600px; }
+		.header-search form { display: flex; }
+		.header-search .input { border-radius: 40px 0 0 40px !important; border: 1px solid #ddd; height: 40px; padding-left: 20px; }
+		.header-search .search-btn { background: var(--primary-green); border: none; border-radius: 0 40px 40px 0 !important; color: #fff; width: 60px; }
+		.header-btns { display: flex; align-items: center; list-style: none; padding: 0; margin: 0; }
+		.header-btns > li { margin-left: 20px; }
+		.icon-btn { font-size: 24px; color: var(--dark-text); position: relative; text-decoration: none !important; transition: 0.3s; }
+		.icon-btn:hover { color: var(--primary-green); }
+		.badge-qty { position: absolute; top: -5px; right: -8px; background: var(--primary-green); color: #fff; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; font-weight: 700; }
+		#mobile-sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; z-index: 2000; transition: 0.3s; box-shadow: 5px 0 15px rgba(0,0,0,0.1); overflow-y: auto; visibility: hidden; pointer-events: none; }
+		#mobile-sidebar.active { left: 0; visibility: visible; pointer-events: auto; }
+		.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; display: none; }
+		.sidebar-overlay.active { display: block; }
+		@media (max-width: 991px) { .hamburger-menu { display: block; } .header-search { display: none; } }
+		#navigation { display: none !important; }
 	</style>
 </head>
-
-<?php
-include 'koneksi.php';
-
-session_start();
-
-$file = basename($_SERVER['PHP_SELF']);
-
-if(!isset($_SESSION['customer_status'])){
-	$lindungi = array('customer.php','customer_logout.php');
-	if(in_array($file, $lindungi)){
-		header("location:index.php");
-	}
-	if($file == "checkout.php"){
-		header("location:masuk.php?alert=login-dulu");
-	}
-}else{
-	$lindungi = array('masuk.php','daftar.php');
-	if(in_array($file, $lindungi)){
-		header("location:customer.php");
-	}
-}
-
-if($file == "checkout.php"){
-	if(!isset($_SESSION['keranjang']) || count($_SESSION['keranjang']) == 0){
-		header("location:keranjang.php?alert=keranjang_kosong");
-	}
-}
-?>
-
+<?php include 'koneksi.php'; session_start(); ?>
 <body>
-	<header>
-		<div id="header">
-			<div class="container">
-				<div class="pull-left">
-					<div class="header-logo">
-						<a class="logo" href="index.php">
-							<img src="frontend/img/freshcart-logo.svg" alt="Fresh Cart">
-						</a>
-					</div>
-					<div class="header-search">
-						<form action="index.php" method="get">
-							<input class="input" type="text" name="cari" placeholder="Cari bahan pangan segar..">
-							<button class="search-btn"><i class="fa fa-search"></i></button>
-						</form>
-					</div>
-					</div>
-				<div class="pull-right">
-					<ul class="header-btns">
+	<div class="sidebar-overlay" id="overlay"></div>
+	<div id="mobile-sidebar">
+		<div style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+			<img src="frontend/img/freshcart-logo.svg" style="height: 30px;">
+			<i class="fa fa-times" id="close-sidebar" style="font-size: 20px; cursor: pointer;"></i>
+		</div>
+		<ul class="mobile-nav-list" style="list-style: none; padding: 15px;">
+			<li><a href="index.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-home" style="color:var(--primary-green); width:25px;"></i> Beranda</a></li>
+			<li><a href="index.php?view=shop" style="display:block; padding:12px; color:#333;"><i class="fa fa-shopping-bag" style="color:var(--primary-green); width:25px;"></i> Produk Belanja</a></li>
+			<li><a href="tentangkami.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-info-circle" style="color:var(--primary-green); width:25px;"></i> Tentang Kami</a></li>
+			<hr>
+			<?php if(!isset($_SESSION['customer_status'])){ ?>
+				<li><a href="masuk.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-sign-in" style="color:var(--primary-green); width:25px;"></i> Masuk</a></li>
+			<?php } else { ?>
+				<li><a href="customer.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-user" style="color:var(--primary-green); width:25px;"></i> Akun Saya</a></li>
+				<li><a href="customer_logout.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-sign-out" style="color:var(--primary-green); width:25px;"></i> Keluar</a></li>
+			<?php } ?>
+		</ul>
+	</div>
 
-						<li class="header-cart dropdown default-dropdown">
-							<?php
-							$jumlah_isi_keranjang = isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0;
-							?>
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-								<div class="header-btns-icon">
-									<i class="fa fa-shopping-basket"></i>
-									<span class="qty"><?php echo $jumlah_isi_keranjang; ?></span>
-								</div>
-								<strong class="text-uppercase" style="font-size: 12px;">Keranjang:</strong><br>
-								<?php
-								$total = 0;
-								if(isset($_SESSION['keranjang'])){
-									$jumlah_isi_keranjang = count($_SESSION['keranjang']);
-									for($a = 0; $a < $jumlah_isi_keranjang; $a++){
-										$id_produk = $_SESSION['keranjang'][$a]['produk'];
-										$isi = mysqli_query($koneksi,"select * from produk where produk_id='$id_produk'");
-										$i = mysqli_fetch_assoc($isi);
-										$total += $i['produk_harga'];
-									}
-								}
-								?>
-								<span style="font-weight: bold; color: var(--primary-green);"><?php echo "Rp. ".number_format($total); ?></span>
-							</a>
-							<div class="custom-menu">
-								<div id="shopping-cart">
-									<div class="shopping-cart-list">
-										<?php
-										if(isset($_SESSION['keranjang']) && count($_SESSION['keranjang']) > 0){
-											$jumlah_isi_keranjang = count($_SESSION['keranjang']);
-											for($a = 0; $a < $jumlah_isi_keranjang; $a++){
-												$id_produk = $_SESSION['keranjang'][$a]['produk'];
-												$isi = mysqli_query($koneksi,"select * from produk where produk_id='$id_produk'");
-												$i = mysqli_fetch_assoc($isi);
-												?>
-												<div class="product product-widget">
-													<div class="product-thumb">
-														<img src="<?php echo ($i['produk_foto1'] == "") ? "https://nibble-images.b-cdn.net/nibble/original_images/supermarket_di_jakarta_4_b03594e68d_np7EAjtsd.jpg" : "gambar/produk/".$i['produk_foto1']; ?>" alt="<?php echo $i['produk_nama']; ?>" style="object-fit: cover;">
-													</div>
-													<div class="product-body">
-														<h3 class="product-price"><?php echo "Rp. ".number_format($i['produk_harga']); ?></h3>
-														<h2 class="product-name"><a href="produk_detail.php?id=<?php echo $i['produk_id'] ?>"><?php echo $i['produk_nama'] ?></a></h2>
-													</div>
-													<a class="cancel-btn" href="keranjang_hapus.php?id=<?php echo $i['produk_id']; ?>&redirect=keranjang"><i class="fa fa-trash"></i></a>
-												</div>
-												<?php
-											}
-										}else{
-											echo "<center>Keranjang Kosong.</center>";
-										}
-										?>
-									</div>
-									<div class="shopping-cart-btns">
-										<a class="main-btn" href="keranjang.php">Detail</a>
-										<a class="primary-btn" href="checkout.php">Checkout</a>
-									</div>
-								</div>
-							</div>
-						</li>
-
-						<?php
-						if(isset($_SESSION['customer_status'])){
-							$id_customer = $_SESSION['customer_id'];
-							$customer = mysqli_query($koneksi,"select * from customer where customer_id='$id_customer'");
-							$c = mysqli_fetch_assoc($customer);
-						?>
-							<li class="header-account dropdown default-dropdown" style="min-width: 150px">
-								<div class="dropdown-toggle" role="button" data-toggle="dropdown">
-									<div class="header-btns-icon"><i class="fa fa-user-circle-o"></i></div>
-									<strong class="text-uppercase"><?php echo explode(' ', $c['customer_nama'])[0]; ?> <i class="fa fa-caret-down"></i></strong>
-								</div>
-								<ul class="custom-menu">
-									<li><a href="customer.php">Akun Saya</a></li>
-									<li><a href="customer_pesanan.php">Pesanan</a></li>
-									<li><a href="customer_logout.php">Keluar</a></li>
-								</ul>
-							</li>
-						<?php }else{ ?>
-							<li class="header-account">
-								<a href="masuk.php" class="text-uppercase main-btn" style="border:none;">Masuk</a>
-								<a href="daftar.php" class="text-uppercase primary-btn">Daftar</a>
-							</li>
-						<?php } ?>
-
-						<li class="nav-toggle">
-							<button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
-						</li>
-					</ul>
+	<header id="header">
+		<div class="container">
+			<div class="header-flex">
+				<div style="display: flex; align-items: center;">
+					<div class="hamburger-menu" id="open-sidebar"><i class="fa fa-bars"></i></div>
+					<div class="header-logo"><a href="index.php"><img src="frontend/img/freshcart-logo.svg" alt="Fresh Cart"></a></div>
 				</div>
+				<div class="header-search">
+					<form action="index.php" method="get">
+						<input class="input form-control" type="text" name="cari" placeholder="Cari bahan pangan segar...">
+						<button class="search-btn"><i class="fa fa-search"></i></button>
+					</form>
+				</div>
+				<ul class="header-btns">
+					<li class="dropdown default-dropdown">
+						<?php $jlh = isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0; ?>
+						<a class="icon-btn" data-toggle="dropdown" style="cursor:pointer"><i class="fa fa-shopping-basket"></i><span class="badge-qty"><?php echo $jlh; ?></span></a>
+						<div class="custom-menu" style="padding:15px; text-align:center; min-width:200px;">
+							<?php echo ($jlh > 0) ? "Ada $jlh item di keranjang" : "Keranjang Kosong"; ?>
+							<a class="primary-btn" href="checkout.php" style="background:var(--primary-green); color:#fff; display:block; padding:8px; margin-top:10px; border-radius:4px; text-align:center; text-decoration:none;">Checkout</a>
+						</div>
+					</li>
+					<?php if(isset($_SESSION['customer_status'])){ ?>
+						<li class="dropdown default-dropdown">
+							<a class="icon-btn" data-toggle="dropdown" style="cursor:pointer"><i class="fa fa-user-circle-o"></i></a>
+							<ul class="custom-menu">
+								<li><a href="customer.php">Profil Saya</a></li>
+								<li><a href="customer_pesanan.php">Pesanan</a></li>
+								<li><a href="customer_logout.php">Keluar</a></li>
+							</ul>
+						</li>
+					<?php } else { ?>
+						<li><a href="masuk.php" class="icon-btn" title="Masuk"><i class="fa fa-sign-in"></i></a></li>
+					<?php } ?>
+				</ul>
 			</div>
 		</div>
 	</header>
-
-	<div id="navigation">
-		<div class="container">
-			<div id="responsive-nav">
-				<div class="category-nav show-on-click">
-					<span class="category-header">Kategori <i class="fa fa-list"></i></span>
-					<ul class="category-list">
-						<?php
-						$data = mysqli_query($koneksi,"SELECT * FROM kategori");
-						while($d = mysqli_fetch_array($data)){
-							echo "<li><a href='produk_kategori.php?id=".$d['kategori_id']."'>".$d['kategori_nama']."</a></li>";
-						}
-						?>
-					</ul>
-				</div>
-				<div class="menu-nav">
-					<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
-					<ul class="menu-list">
-						<li class="active"><a href="index.php">Home</a></li>
-						<li><a href="index.php">Belanja</a></li>
-						<li><a href="tentangkami.php">Tentang Kami</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+	<script>
+		const openBtn = document.getElementById('open-sidebar');
+		const closeBtn = document.getElementById('close-sidebar');
+		const sidebar = document.getElementById('mobile-sidebar');
+		const overlay = document.getElementById('overlay');
+		if(openBtn) openBtn.onclick = () => { sidebar.classList.add('active'); overlay.classList.add('active'); };
+		const closeMenu = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); };
+		if(closeBtn) closeBtn.onclick = closeMenu;
+		if(overlay) overlay.onclick = closeMenu;
+	</script>

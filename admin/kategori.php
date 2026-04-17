@@ -1,70 +1,132 @@
 <?php include 'header.php'; ?>
+<style>
+/* Simple Styles - Smooth & Clean */
+.box-modern { background: white; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #eef2f0; overflow: hidden; margin-top: 20px; }
+.btn-green { background: #78B817; color: white; border: none; padding: 8px 20px; border-radius: 40px; text-decoration: none; display: inline-block; cursor: pointer; }
+.btn-green:hover { background: #5e9c12; color: white; }
+.btn-warning-custom { background: #f39c12; color: white; border-radius: 8px; padding: 6px 14px; margin: 0 3px; display: inline-block; border: none; cursor: pointer; }
+.btn-danger-custom { background: #e74c3c; color: white; border-radius: 8px; padding: 6px 14px; display: inline-block; border: none; cursor: pointer; }
+.table-custom th { background: #f8fafc; color: #2c3e50; font-weight: 600; border-bottom: 2px solid #78B817; padding: 14px 12px; }
+.table-custom td { padding: 12px; vertical-align: middle; }
+.modal-modern .modal-content { border-radius: 24px; border: none; }
+.modal-modern .modal-header { background: linear-gradient(135deg, #78B817, #669e12); color: white; border-radius: 24px 24px 0 0; padding: 16px 24px; }
+.modal-modern .modal-header .close { color: white; opacity: 0.8; }
+.modal-modern .modal-body { padding: 24px; }
+.form-control-modern { border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px 16px; width: 100%; }
+.form-control-modern:focus { border-color: #78B817; outline: none; box-shadow: 0 0 0 3px rgba(120,184,23,0.1); }
+.content-header h1 { font-size: 22px; font-weight: 600; color: #2c3e50; margin-bottom: 5px; }
+.content-header small { color: #7f8c8d; font-size: 13px; }
+/* Hilangkan animasi fade yang aneh */
+.animate__animated { animation: none !important; }
+/* Smooth loading untuk modal */
+.modal.fade .modal-dialog {
+    transition: transform 0.2s ease-out;
+}
+</style>
 
-<div class="content-wrapper">
-
+<div class="content-wrapper" style="background: #f4f6fa;">
   <section class="content-header">
-    <h1>
-      Kategori
-      <small>Data Kategori</small>
-    </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Dashboard</li>
-    </ol>
+    <h1><i class="fa fa-folder" style="color: #78B817;"></i> Data Kategori</h1>
+    <small>Kelola semua kategori produk</small>
   </section>
 
-  <section class="content">
-    <div class="row">
-      <section class="col-lg-8">
-        <div class="box box-info">
-
-          <div class="box-header">
-            <h3 class="box-title">Kategori</h3>
-            <div class="btn-group pull-right">
-              <a href="kategori_tambah.php" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> &nbsp Tambah kategori</a>              
-            </div>
-          </div>
-          <div class="box-body">
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-striped" id="table-datatable">
-                <thead>
-                  <tr>
-                    <th width="1%">NO</th>
-                    <th>NAMA</th>
-                    <th width="15%">OPSI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php 
-                  include '../koneksi.php';
-                  $no=1;
-                  $data = mysqli_query($koneksi,"SELECT * FROM kategori");
-                  while($d = mysqli_fetch_array($data)){
-                    ?>
-                    <tr>
-                      <td><?php echo $no++; ?></td>
-                      <td><?php echo $d['kategori_nama']; ?></td>
-                      <td>                      
-                        <?php if($d['kategori_id'] != 1){ ?>  
-                          <a class="btn btn-warning btn-sm" href="kategori_edit.php?id=<?php echo $d['kategori_id'] ?>"><i class="fa fa-cog"></i></a>
-                          <a class="btn btn-danger btn-sm" href="kategori_hapus_konfir.php?id=<?php echo $d['kategori_id'] ?>"><i class="fa fa-trash"></i></a>
-                        <?php } ?>
-                      </td>
-                    </tr>
-                    <?php 
-                  }
-                  ?>
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-
+  <section class="content" style="padding-top: 10px;">
+    <div class="box-modern">
+      <div class="box-header" style="padding: 16px 20px; border-bottom: 1px solid #eef2f0;">
+        <h3 class="box-title" style="font-weight: 600; margin: 0;"><i class="fa fa-list"></i> Daftar Kategori</h3>
+        <button type="button" class="btn-green pull-right" data-toggle="modal" data-target="#modalTambahKategori" style="border: none;">
+          <i class="fa fa-plus"></i> Tambah Kategori
+        </button>
+      </div>
+      <div class="box-body" style="padding: 20px;">
+        <div class="table-responsive">
+          <table class="table table-custom table-bordered table-striped" id="table-datatable">
+            <thead>
+              <tr><th width="5%">NO</th><th>NAMA KATEGORI</th><th width="20%">OPSI</th></tr>
+            </thead>
+            <tbody>
+              <?php include '../koneksi.php'; $no=1; $data = mysqli_query($koneksi,"SELECT * FROM kategori ORDER BY kategori_id ASC");
+              while($d = mysqli_fetch_array($data)){ ?>
+              <tr>
+                <td><?php echo $no++; ?></td>
+                <td><?php echo $d['kategori_nama']; ?></span></td>
+                <td>
+                  <?php if($d['kategori_id'] != 1){ ?>
+                    <button class="btn-warning-custom" onclick="openEditModal(<?php echo $d['kategori_id']; ?>, '<?php echo addslashes($d['kategori_nama']); ?>')"><i class="fa fa-edit"></i> Edit</button>
+                    <button class="btn-danger-custom" onclick="confirmDelete(<?php echo $d['kategori_id']; ?>)"><i class="fa fa-trash"></i> Hapus</button>
+                  <?php } else { echo '<span class="text-muted">Default</span>'; } ?>
+                 </span></td>
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
         </div>
-      </section>
+      </div>
     </div>
   </section>
-
 </div>
+
+<!-- Modal Tambah Kategori -->
+<div class="modal fade modal-modern" id="modalTambahKategori" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-plus-circle"></i> Tambah Kategori Baru</h4>
+      </div>
+      <form action="kategori_act.php" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label style="font-weight: 600; margin-bottom: 8px;">Nama Kategori</label>
+            <input type="text" class="form-control-modern" name="nama" placeholder="Masukkan nama kategori..." required autocomplete="off">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="border-radius: 40px;">Batal</button>
+          <button type="submit" class="btn-green" style="border: none;">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Kategori -->
+<div class="modal fade modal-modern" id="modalEditKategori" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-edit"></i> Edit Kategori</h4>
+      </div>
+      <form action="kategori_update.php" method="post">
+        <div class="modal-body">
+          <input type="hidden" name="id" id="edit_id">
+          <div class="form-group">
+            <label style="font-weight: 600; margin-bottom: 8px;">Nama Kategori</label>
+            <input type="text" class="form-control-modern" name="nama" id="edit_nama" placeholder="Masukkan nama kategori..." required autocomplete="off">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="border-radius: 40px;">Batal</button>
+          <button type="submit" class="btn-green" style="border: none;">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function openEditModal(id, nama) {
+  document.getElementById('edit_id').value = id;
+  document.getElementById('edit_nama').value = nama;
+  $('#modalEditKategori').modal('show');
+}
+
+function confirmDelete(id) {
+  if(confirm('Yakin ingin menghapus kategori ini?\n\nData produk yang menggunakan kategori ini akan dialihkan ke "Tidak Berkategori".')) {
+    window.location.href = 'kategori_hapus.php?id=' + id;
+  }
+}
+</script>
+
 <?php include 'footer.php'; ?>

@@ -22,9 +22,95 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   <style>
-    .main-header .navbar { background-color: #78B817 !important; }
+    /* Header Navbar & Logo */
+    .main-header .navbar { background: linear-gradient(135deg, #78B817, #669e12) !important; }
     .main-header .logo { background-color: #669e12 !important; }
-  </style>
+    
+    /* ========== PERBAIKAN SIDEBAR AGAR TEKS JELAS ========== */
+    .skin-green .main-sidebar {
+        background: #ffffff;
+    }
+    
+    /* Teks menu sidebar jadi GELAP & TERBACA */
+    .skin-green .sidebar-menu > li > a {
+        color: #2c3e50 !important;
+        font-weight: 500;
+        border-radius: 10px;
+        margin: 4px 12px;
+    }
+    
+    /* Icon sidebar warna hijau */
+    .skin-green .sidebar-menu > li > a > i {
+        color: #78B817 !important;
+    }
+    
+    /* Hover */
+    .skin-green .sidebar-menu > li > a:hover {
+        background: #eef5e6 !important;
+        color: #1a5c0e !important;
+    }
+    
+    /* Menu Aktif */
+    .skin-green .sidebar-menu > li.active > a {
+        background: #78B817 !important;
+        color: white !important;
+        box-shadow: 0 2px 8px rgba(120,184,23,0.3);
+    }
+    
+    .skin-green .sidebar-menu > li.active > a > i {
+        color: white !important;
+    }
+    
+    /* Header Navigasi Utama */
+    .sidebar-menu .header {
+        color: #78B817 !important;
+        font-weight: 700;
+        font-size: 0.75rem;
+    }
+    
+    /* User panel teks */
+    .user-panel > .info > p {
+        color: #2c3e50 !important;
+        font-weight: 600;
+    }
+    
+    .user-panel > .info > a {
+        color: #78B817 !important;
+    }
+    
+    /* Dropdown submenu */
+    .sidebar-menu .treeview-menu > li > a {
+        color: #4a5a6e !important;
+    }
+    
+    .sidebar-menu .treeview-menu > li > a:hover {
+        color: #78B817 !important;
+        background: #f0f7e8;
+    }
+
+    /* ========== HILANGKAN WARNA ABU-ABU DI SIDEBAR ========== */
+.skin-green .sidebar-menu > li > a {
+  background: transparent !important;
+  color: #2c3e50 !important;
+}
+
+.skin-green .sidebar-menu > li > a:hover {
+  background: #eef5e6 !important;
+  color: #1a5c0e !important;
+}
+
+/* Hilangkan background abu-abu default */
+.skin-green .sidebar-menu > li {
+  background: transparent !important;
+}
+
+/* Hilangkan efek abu-abu pada body sidebar */
+.skin-green .main-sidebar,
+.skin-green .left-side,
+.skin-green .sidebar {
+  background: #ffffff !important;
+}
+</style>
 
   <?php
   include '../koneksi.php';
@@ -67,8 +153,10 @@
               </a>
             </li>
             <li>
-              <a href="logout.php"><i class="fa fa-sign-out"></i> LOGOUT</a>
-            </li>
+  <a href="#" onclick="confirmLogout(event)">
+    <i class="fa fa-sign-out"></i> <span>Log out</span>
+  </a>
+</li>
           </ul>
         </div>
       </nav>
@@ -96,62 +184,58 @@
         </div>
 
         <ul class="sidebar-menu" data-widget="tree">
-          <li class="header">NAVIGASI UTAMA</li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>">
+    <a href="index.php">
+      <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="index.php">
-              <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
-            </a>
-          </li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'kategori.php') ? 'active' : ''; ?>">
+    <a href="kategori.php">
+      <i class="fa fa-folder"></i> <span>Data Kategori</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="kategori.php">
-              <i class="fa fa-folder"></i> <span>DATA KATEGORI</span>
-            </a>
-          </li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'produk.php') ? 'active' : ''; ?>">
+    <a href="produk.php">
+      <i class="fa fa-leaf"></i> <span>Data Produk</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="produk.php">
-              <i class="fa fa-leaf"></i> <span>DATA PRODUK</span>
-            </a>
-          </li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'customer.php') ? 'active' : ''; ?>">
+    <a href="customer.php">
+      <i class="fa fa-users"></i> <span>Data Pelanggan</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="customer.php">
-              <i class="fa fa-users"></i> <span>DATA PELANGGAN</span>
-            </a>
-          </li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'transaksi.php') ? 'active' : ''; ?>">
+    <a href="transaksi.php">
+      <i class="fa fa-shopping-basket"></i> <span>Transaksi / Pesanan</span>
+    </a>
+  </li>
 
-           <li>
-            <a href="transaksi.php">
-              <i class="fa fa-shopping-basket"></i> <span>TRANSAKSI / PESANAN</span>
-            </a>
-          </li>
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'laporan.php') ? 'active' : ''; ?>">
+    <a href="laporan.php">
+      <i class="fa fa-file-text-o"></i> <span>Laporan Penjualan</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="laporan.php">
-              <i class="fa fa-file-text-o"></i> <span>LAPORAN PENJUALAN</span>
-            </a>
-          </li>
+  <!-- Spacer -->
+  <li style="height: 20px;"></li>
 
-          <li>
-            <a href="admin.php">
-              <i class="fa fa-user-secret"></i> <span>DATA ADMIN</span>
-            </a>
-          </li>
+  <!-- SETTINGS - langsung ke halaman settings.php (tanpa dropdown) -->
+  <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'settings.php') ? 'active' : ''; ?>">
+    <a href="settings.php">
+      <i class="fa fa-cog"></i> <span>Settings</span>
+    </a>
+  </li>
 
-          <li>
-            <a href="gantipassword.php">
-              <i class="fa fa-lock"></i> <span>GANTI PASSWORD</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="logout.php">
-              <i class="fa fa-sign-out"></i> <span>LOGOUT</span>
-            </a>
-          </li>
-
-        </ul>
+  <!-- LOGOUT -->
+  <li>
+    <a href="logout.php">
+      <i class="fa fa-sign-out"></i> <span>Log out</span>
+    </a>
+  </li>
+</ul>
       </section>
     </aside>

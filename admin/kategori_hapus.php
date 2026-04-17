@@ -2,9 +2,8 @@
 include '../koneksi.php';
 $id = $_GET['id'];
 
-mysqli_query($koneksi, "delete from kategori where kategori_id='$id'");
+mysqli_query($koneksi, "DELETE FROM kategori WHERE kategori_id='$id'");
+mysqli_query($koneksi, "UPDATE produk SET produk_kategori='1' WHERE produk_kategori='$id'");
 
-
-mysqli_query($koneksi,"update produk set produk_kategori='1' where produk_kategori='$id'");
-
-header("location:kategori.php");
+header("location: kategori.php");
+?>
