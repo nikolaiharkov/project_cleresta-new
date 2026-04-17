@@ -1,44 +1,18 @@
-# --- DEPENDENCIES ---
-# Mengabaikan library frontend yang diinstall via Bower
-assets/bower_components/
+# 1. Abaikan semua folder di direktori root
+/*/
 
-# Mengabaikan folder vendor jika nanti menggunakan Composer
-vendor/
-node_modules/
-frontend/
+# 2. Kecualikan folder admin agar tetap masuk repository
+!/admin/
 
-# --- USER UPLOADS & DYNAMIC CONTENT ---
-# Mengabaikan gambar yang diunggah oleh user agar tidak memenuhi repo
-gambar/bukti_pembayaran/*
-gambar/produk/*
-gambar/user/*
+# 3. File di root (seperti index.php, .gitignore, dll) 
+# secara otomatis tetap dilacak karena pattern /*/ hanya mengenai folder.
 
-# Kecuali file .gitkeep (agar struktur folder tetap ada di Git)
-!gambar/bukti_pembayaran/.gitkeep
-!gambar/produk/.gitkeep
-!gambar/user/.gitkeep
+# --- Pengecualian Tambahan (Opsional) ---
+# Jika di dalam folder admin ada file sampah OS, tetap abaikan
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini
 
-# --- OS ARTIFACTS ---
-# Mengabaikan file sampah bawaan OS (banyak ditemukan .DS_Store di folder Anda)
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# --- IDE & TOOLS ---
-.idea/
-.vscode/
-*.swp
-*.bak
-.laragon/
-
-# --- LOGS & TEMP ---
+# Abaikan log dan temp
 *.log
 error_log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
