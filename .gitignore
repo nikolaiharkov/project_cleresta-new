@@ -5,6 +5,7 @@ assets/bower_components/
 # Mengabaikan folder vendor jika nanti menggunakan Composer
 vendor/
 node_modules/
+frontend/
 
 # --- USER UPLOADS & DYNAMIC CONTENT ---
 # Mengabaikan gambar yang diunggah oleh user agar tidak memenuhi repo
