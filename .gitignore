@@ -1,33 +1,43 @@
-# --- OS & IDE Files ---
-.DS_Store
-Thumbs.db
-desktop.ini
-.vscode/
-.idea/
-
-# --- Laragon & Server Logs ---
-*.log
-access_log
-error_log
-.htaccess.backup
-
-# --- Dependencies (Library pihak ketiga) ---
-# Sebaiknya library ini dikelola via Bower/Composer, bukan disimpan di Git
+# --- DEPENDENCIES ---
+# Mengabaikan library frontend yang diinstall via Bower
 assets/bower_components/
-library/dompdf/
 
-# --- User Uploaded Content (Aset Dinamis) ---
-# Kita abaikan isinya, tapi tetap simpan foldernya
+# Mengabaikan folder vendor jika nanti menggunakan Composer
+vendor/
+node_modules/
+
+# --- USER UPLOADS & DYNAMIC CONTENT ---
+# Mengabaikan gambar yang diunggah oleh user agar tidak memenuhi repo
 gambar/bukti_pembayaran/*
 gambar/produk/*
 gambar/user/*
 
-# Kecualikan file index atau placeholder agar folder kosong tetap ter-track di Git
+# Kecuali file .gitkeep (agar struktur folder tetap ada di Git)
 !gambar/bukti_pembayaran/.gitkeep
 !gambar/produk/.gitkeep
 !gambar/user/.gitkeep
 
-# --- Temp & Caches ---
-assets/build/less/
-assets/build/scss/
-.cache/
+# --- OS ARTIFACTS ---
+# Mengabaikan file sampah bawaan OS (banyak ditemukan .DS_Store di folder Anda)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --- IDE & TOOLS ---
+.idea/
+.vscode/
+*.swp
+*.bak
+.laragon/
+
+# --- LOGS & TEMP ---
+*.log
+error_log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
