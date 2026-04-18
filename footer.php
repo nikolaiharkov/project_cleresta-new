@@ -20,7 +20,7 @@
           <h4 style="color: #333; font-weight: 700; margin-bottom: 20px;">Halaman</h4>
           <ul style="list-style: none; padding: 0; line-height: 2.2;">
             <li><a href="index.php" style="color: #666; text-decoration: none;">Beranda</a></li>
-            <li><a href="index.php" style="color: #666; text-decoration: none;">Belanja</a></li>
+            <li><a href="index.php?view=shop" style="color: #666; text-decoration: none;">Belanja</a></li>
             <li><a href="tentangkami.php" style="color: #666; text-decoration: none;">Tentang Kami</a></li>
             <li><a href="#" style="color: #666; text-decoration: none;">Promo</a></li>
           </ul>
@@ -84,11 +84,85 @@
 <script src="assets/dist/js/demo.js"></script>
 <script src="assets/bower_components/ckeditor/ckeditor.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="frontend/js/slick.min.js"></script>
 
 <script>
   $(document).ready(function(){
-    // Inisialisasi DataTable hanya jika ada tabel dengan ID tersebut
+    // --- SweetAlert Handler ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const alertType = urlParams.get('alert');
+
+    if (alertType) {
+      let title = "";
+      let text = "";
+      let icon = "";
+
+      switch (alertType) {
+        case 'sukses':
+          title = "Berhasil!";
+          text = "Transaksi atau perubahan data Anda telah disimpan.";
+          icon = "success";
+          break;
+        case 'gagal':
+          title = "Gagal!";
+          text = "Email atau Password tidak sesuai. Silahkan coba lagi.";
+          icon = "error";
+          break;
+        case 'terdaftar':
+          title = "Pendaftaran Berhasil!";
+          text = "Akun Anda telah dibuat. Silahkan login.";
+          icon = "success";
+          break;
+        case 'login-dulu':
+          title = "Akses Ditolak";
+          text = "Silahkan login terlebih dahulu untuk melanjutkan belanja.";
+          icon = "warning";
+          break;
+        case 'ditambahkan':
+          title = "Masuk Keranjang!";
+          text = "Produk berhasil ditambahkan ke daftar belanja Anda.";
+          icon = "success";
+          break;
+        case 'terhapus':
+          title = "Dihapus!";
+          text = "Item berhasil dihapus dari keranjang.";
+          icon = "info";
+          break;
+        case 'update_sukses':
+          title = "Terupdate!";
+          text = "Jumlah belanjaan Anda telah berhasil diperbarui.";
+          icon = "success";
+          break;
+        case 'logout':
+          title = "Logged Out";
+          text = "Anda telah berhasil keluar dari sistem.";
+          icon = "success";
+          break;
+        case 'belum_login':
+          title = "Perhatian";
+          text = "Halaman ini memerlukan hak akses login.";
+          icon = "error";
+          break;
+        case 'upload':
+          title = "Bukti Terkirim!";
+          text = "Konfirmasi pembayaran berhasil tersimpan, menunggu verifikasi admin.";
+          icon = "success";
+          break;
+      }
+
+      if (title !== "") {
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: icon,
+          confirmButtonColor: '#78B817',
+        });
+      }
+    }
+
+    // --- Inisialisasi DataTable ---
     if ($.fn.DataTable && $('#table-datatable').length) {
       $('#table-datatable').DataTable({
         'paging'      : true,
@@ -101,7 +175,7 @@
       });
     }
 
-    // Inisialisasi Datepicker
+    // --- Inisialisasi Datepicker ---
     if ($.fn.datepicker) {
       $('#datepicker').datepicker({
         autoclose: true,
@@ -114,7 +188,7 @@
       });
     }
 
-    // Inisialisasi CKEditor jika library termuat
+    // --- Inisialisasi CKEditor ---
     if (typeof CKEDITOR !== 'undefined' && $('#editor1').length) {
       CKEDITOR.replace('editor1');
     }

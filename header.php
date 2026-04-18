@@ -11,6 +11,7 @@
 	<link type="text/css" rel="stylesheet" href="frontend/css/slick-theme.css" />
 	<link rel="stylesheet" href="frontend/css/font-awesome.min.css">
 	<link type="text/css" rel="stylesheet" href="frontend/css/style.css" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<style>
 		:root { --primary-green: #78B817; --dark-text: #333; }
 		@media (min-width: 1200px) { .container { width: 95% !important; max-width: 1500px !important; } }
@@ -36,7 +37,12 @@
 		#navigation { display: none !important; }
 	</style>
 </head>
-<?php include 'koneksi.php'; session_start(); ?>
+<?php 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include 'koneksi.php';
+?>
 <body>
 	<div class="sidebar-overlay" id="overlay"></div>
 	<div id="mobile-sidebar">
@@ -49,11 +55,12 @@
 			<li><a href="index.php?view=shop" style="display:block; padding:12px; color:#333;"><i class="fa fa-shopping-bag" style="color:var(--primary-green); width:25px;"></i> Produk Belanja</a></li>
 			<li><a href="tentangkami.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-info-circle" style="color:var(--primary-green); width:25px;"></i> Tentang Kami</a></li>
 			<hr>
-			<?php if(!isset($_SESSION['customer_status'])){ ?>
-				<li><a href="masuk.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-sign-in" style="color:var(--primary-green); width:25px;"></i> Masuk</a></li>
-			<?php } else { ?>
-				<li><a href="customer.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-user" style="color:var(--primary-green); width:25px;"></i> Akun Saya</a></li>
+			<?php if(isset($_SESSION['customer_status'])){ ?>
+				<li><a href="customer.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-user" style="color:var(--primary-green); width:25px;"></i> Profil</a></li>
+				<li><a href="customer_pesanan.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-list" style="color:var(--primary-green); width:25px;"></i> Pesanan</a></li>
 				<li><a href="customer_logout.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-sign-out" style="color:var(--primary-green); width:25px;"></i> Keluar</a></li>
+			<?php } else { ?>
+				<li><a href="masuk.php" style="display:block; padding:12px; color:#333;"><i class="fa fa-sign-in" style="color:var(--primary-green); width:25px;"></i> Masuk</a></li>
 			<?php } ?>
 		</ul>
 	</div>
@@ -73,20 +80,46 @@
 				</div>
 				<ul class="header-btns">
 					<li class="dropdown default-dropdown">
-						<?php $jlh = isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0; ?>
+						<?php 
+						$jlh = isset($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0;
+						?>
 						<a class="icon-btn" data-toggle="dropdown" style="cursor:pointer"><i class="fa fa-shopping-basket"></i><span class="badge-qty"><?php echo $jlh; ?></span></a>
-						<div class="custom-menu" style="padding:15px; text-align:center; min-width:200px;">
-							<?php echo ($jlh > 0) ? "Ada $jlh item di keranjang" : "Keranjang Kosong"; ?>
-							<a class="primary-btn" href="checkout.php" style="background:var(--primary-green); color:#fff; display:block; padding:8px; margin-top:10px; border-radius:4px; text-align:center; text-decoration:none;">Checkout</a>
+						<div class="custom-menu dropdown-menu-right" style="padding:15px; text-align:center; min-width:250px;">
+							<div class="shopping-cart-list" style="margin-bottom: 10px; max-height: 200px; overflow-y: auto;">
+								<?php 
+								if($jlh > 0){
+									foreach($_SESSION['keranjang'] as $c){
+										$id_p = $c['produk'];
+										$q = mysqli_query($koneksi, "SELECT * FROM produk WHERE produk_id='$id_p'");
+										$p = mysqli_fetch_assoc($q);
+								?>
+									<div class="product-widget" style="display:flex; align-items:center; margin-bottom:8px; border-bottom:1px solid #f5f5f5; padding-bottom:5px;">
+										<div class="product-img" style="width:35px; margin-right:10px;">
+											<img src="gambar/produk/<?php echo $p['produk_foto1']; ?>" style="width:100%;">
+										</div>
+										<div class="product-body" style="text-align:left; flex:1;">
+											<h4 style="font-size:11px; margin:0;"><?php echo $p['produk_nama']; ?></h4>
+											<small><?php echo $c['jumlah']; ?> x Rp. <?php echo number_format($p['produk_harga']); ?></small>
+										</div>
+									</div>
+								<?php 
+									}
+								} else {
+									echo "Keranjang Kosong";
+								}
+								?>
+							</div>
+							<a class="main-btn btn-block" href="keranjang.php" style="margin-bottom:5px;">Lihat Keranjang</a>
+							<a class="primary-btn btn-block" href="checkout.php" style="background:var(--primary-green); color:#fff;">Checkout</a>
 						</div>
 					</li>
 					<?php if(isset($_SESSION['customer_status'])){ ?>
 						<li class="dropdown default-dropdown">
 							<a class="icon-btn" data-toggle="dropdown" style="cursor:pointer"><i class="fa fa-user-circle-o"></i></a>
-							<ul class="custom-menu">
-								<li><a href="customer.php">Profil Saya</a></li>
-								<li><a href="customer_pesanan.php">Pesanan</a></li>
-								<li><a href="customer_logout.php">Keluar</a></li>
+							<ul class="custom-menu dropdown-menu-right">
+								<li><a href="customer.php"><i class="fa fa-user"></i> Profil</a></li>
+								<li><a href="customer_pesanan.php"><i class="fa fa-list"></i> Pesanan</a></li>
+								<li><a href="customer_logout.php"><i class="fa fa-sign-out"></i> Keluar</a></li>
 							</ul>
 						</li>
 					<?php } else { ?>

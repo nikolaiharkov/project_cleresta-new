@@ -1,6 +1,5 @@
 <?php include 'header.php'; ?>
 
-<!-- BREADCRUMB -->
 <div id="breadcrumb">
 	<div class="container">
 		<ul class="breadcrumb">
@@ -9,8 +8,6 @@
 		</ul>
 	</div>
 </div>
-<!-- /BREADCRUMB -->
-
 <div class="section">
 	<div class="container">
 		<div class="row">
@@ -52,12 +49,11 @@
 								<table class="table table-bordered">
 									<thead>
 										<tr>
-											<th>NO</th>
-											<th>No.Invoice</th>
-											<th>Tanggal</th>
-											<th>Nama Penerima</th>
-											<th>Total Bayar</th>
-											<th class="text-center">Status</th>
+											<th width="1%">NO</th>
+											<th class="text-center">NOMOR INVOICE</th>
+											<th class="text-center">TANGGAL</th>
+											<th class="text-center">TOTAL BAYAR</th>
+											<th class="text-center">STATUS</th>
 											<th class="text-center">OPSI</th>
 										</tr>
 									</thead>
@@ -65,14 +61,25 @@
 										<?php 
 										$id = $_SESSION['customer_id'];
 										$invoice = mysqli_query($koneksi,"select * from invoice where invoice_customer='$id' order by invoice_id desc");
+										
+										// Inisialisasi variabel nomor urut
+										$no = 1; 
+										
 										while($i = mysqli_fetch_array($invoice)){
+											// Perbaikan Error Undefined Index: Cek nama kolom yang mungkin berbeda
+											if(isset($i['invoice_tgl'])){
+												$tgl_pesanan = $i['invoice_tgl'];
+											} elseif(isset($i['invoice_tanggal'])) {
+												$tgl_pesanan = $i['invoice_tanggal'];
+											} else {
+												$tgl_pesanan = date('Y-m-d'); // Fallback jika kolom tidak ditemukan
+											}
 											?>
 											<tr>
-												<td><?php echo $i['invoice_id'] ?></td>
-												<td>INVOICE-00<?php echo $i['invoice_id'] ?></td>
-												<td><?php echo $i['invoice_tanggal'] ?></td>
-												<td><?php echo $i['invoice_nama'] ?></td>
-												<td><?php echo "Rp. ".number_format($i['invoice_total_bayar'])." ,-" ?></td>
+												<td class="text-center"><?php echo $no++; ?></td>
+												<td class="text-center">INV-00<?php echo $i['invoice_id']; ?></td>
+												<td class="text-center"><?php echo date('d-m-Y', strtotime($tgl_pesanan)); ?></td>
+												<td class="text-center"><?php echo "Rp. ".number_format($i['invoice_total_bayar'])." ,-"; ?></td>
 												<td class="text-center">
 													<?php 
 													if($i['invoice_status'] == 0){
@@ -92,13 +99,9 @@
 												</td>
 												<td class="text-center">
 													<?php 
-													if($i['invoice_status'] == 0){
+													if($i['invoice_status'] == 0 || $i['invoice_status'] == 1){
 														?>
-														<a class='btn btn-sm btn-primary' href="customer_pembayaran.php?id=<?php echo $i['invoice_id']; ?>"><i class="fa fa-money"></i> Konfirmasi Pembayaran</a>
-														<?php
-													}elseif($i['invoice_status'] == 1){
-														?>
-														<a class='btn btn-sm btn-primary' href="customer_pembayaran.php?id=<?php echo $i['invoice_id']; ?>"><i class="fa fa-money"></i> Konfirmasi Pembayaran</a>
+														<a class='btn btn-sm btn-primary' href="customer_pembayaran.php?id=<?php echo $i['invoice_id']; ?>"><i class="fa fa-money"></i> Pembayaran</a>
 														<?php
 													}
 													?>

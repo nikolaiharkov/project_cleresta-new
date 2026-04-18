@@ -1,0 +1,29 @@
+DAFTAR PRIORITAS PENGERJAAN - PROJECT CLARESTA
+Update: 17 April 2026
+
+----------------------------------------------------------------------
+[HIGH PRIORITY] - WAJIB SELESAI SEGERA (DEMO-READY)
+----------------------------------------------------------------------
+1. Integrasi Admin: Mengembalikan bagian statis di file admin kiriman 
+   klien menjadi fungsional/dinamis (koneksi database).
+2. Perbaikan Admin: Memastikan fitur edit data admin dan upload foto 
+   profil berfungsi tanpa error.
+5. Hosting: Melakukan upload file ke hosting segera setelah fungsi 
+   utama berjalan (syarat wajib presentasi).
+
+----------------------------------------------------------------------
+[MEDIUM PRIORITY] - PELENGKAP & VALIDASI DATA
+----------------------------------------------------------------------
+1. Dashboard Chart: Menambahkan diagram/bar chart sederhana di halaman 
+   admin sesuai permintaan klien.
+2. Testing Transaksi: Melakukan uji coba transaksi (fake transaction) 
+   untuk memastikan data masuk ke laporan admin. (buyer done)
+3. Sinkronisasi Laporan: Memastikan halaman laporan dan riwayat 
+   transaksi menampilkan data yang sesuai dengan database.
+
+----------------------------------------------------------------------
+
+CATATAN TAMBAHAN:
+- Hindari merombak total dashboard admin karena klien sudah handle CSS.
+- Selalu update progres setelah satu poin High Priority selesai untuk 
+  menjaga kepercayaan klien.
