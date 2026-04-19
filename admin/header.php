@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/bower_components/Ionicons/css/ionicons.min.css">
   <link rel="stylesheet" href="../assets/dist/css/AdminLTE.min.css">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="../assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 
   <link rel="stylesheet" href="../assets/dist/css/skins/_all-skins.min.css">
@@ -153,7 +153,7 @@
               </a>
             </li>
             <li>
-  <a href="#" onclick="confirmLogout(event)">
+  <a href="logout.php" onclick="confirmLogout(event)">
     <i class="fa fa-sign-out"></i> <span>Log out</span>
   </a>
 </li>
@@ -231,11 +231,11 @@
   </li>
 
   <!-- LOGOUT -->
-  <li>
-    <a href="logout.php">
-      <i class="fa fa-sign-out"></i> <span>Log out</span>
-    </a>
-  </li>
+<li>
+  <a href="logout.php">
+    <i class="fa fa-sign-out"></i> <span>LOGOUT</span>
+  </a>
+</li>
 </ul>
       </section>
     </aside>

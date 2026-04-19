@@ -1,16 +1,20 @@
 <?php 
 include '../koneksi.php';
-$id = $_GET['id'];
+$id = mysqli_real_escape_string($koneksi, $_GET['id']);
 
-mysqli_query($koneksi, "delete from customer where customer_id='$id'");
-
-$data = mysqli_query($koneksi, "select * from invoice where invoice_customer='$id'");
-while($d=mysqli_fetch_array($data)){
-	$id_invoice = $d['invoice_id'];
-
-	mysqli_query($koneksi,"delete from transaksi where transaksi_invoice='$id_invoice'");
+// 1. Hapus detail transaksi yang terkait dengan invoice customer ini
+$get_invoice = mysqli_query($koneksi, "SELECT invoice_id FROM invoice WHERE invoice_customer='$id'");
+while($inv = mysqli_fetch_array($get_invoice)){
+    $id_inv = $inv['invoice_id'];
+    mysqli_query($koneksi, "DELETE FROM transaksi WHERE transaksi_invoice='$id_inv'");
 }
 
-mysqli_query($koneksi, "delete from invoice where invoice_customer='$id'");
+// 2. Hapus invoice milik customer
+mysqli_query($koneksi, "DELETE FROM invoice WHERE invoice_customer='$id'");
 
-header("location:customer.php");
+// 3. Hapus data customer utama
+mysqli_query($koneksi, "DELETE FROM customer WHERE customer_id='$id'");
+
+header("location:customer.php?alert=terhapus");
+exit;
+?>

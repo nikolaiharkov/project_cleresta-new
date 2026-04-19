@@ -41,7 +41,7 @@
       margin-bottom: 16px;
     }
     .stat-value-modern {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: #1a2c3e;
       margin-bottom: 8px;
@@ -64,7 +64,6 @@
       margin-top: 10px;
     }
     .trend-up { background: #e8f8f0; color: #27ae60; }
-    .trend-down { background: #fee8e8; color: #e74c3c; }
     
     /* Charts Row */
     .charts-modern-row {
@@ -121,7 +120,6 @@
       color: #5a6e7a;
       border-bottom: 2px solid #f0f4f8;
       font-size: 0.8rem;
-      letter-spacing: 0.5px;
     }
     .table-modern td {
       padding: 14px 12px;
@@ -139,7 +137,7 @@
     .status-completed { background: #e3f9ee; color: #2e7d32; }
     .status-pending { background: #fff3e0; color: #e65100; }
     .status-processing { background: #e3f2fd; color: #1565c0; }
-    .status-shipped { background: #f3e5f5; color: #6a1b9a; }
+    .status-cancelled { background: #fee8e8; color: #c62828; }
     
     .btn-view-all {
       background: transparent;
@@ -155,93 +153,77 @@
       background: #78B817;
       color: white;
     }
-    .greeting-text {
-      font-size: 0.9rem;
-      color: #5a6e7a;
-      margin-top: 4px;
-    }
   </style>
 
   <section class="content-header" style="padding-bottom: 0;">
     <h1 style="font-weight: 600; color: #2c3e50;">
       Dashboard 
-      <small style="color: #78B817;">Fresh Cart</small>
+      <small style="color: #78B817;">Fresh Cart Overview</small>
     </h1>
-    <ol class="breadcrumb" style="background: transparent;">
-      <li><a href="#" style="color: #78B817;"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Dashboard</li>
-    </ol>
   </section>
 
   <section class="content" style="padding-top: 20px;">
     
-    <!-- Stats Cards Modern -->
     <div class="modern-stats">
       <?php
-      // Get real data from database
+      // Mengambil data real dari database
       $total_produk = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) as total FROM produk"))['total'];
       $total_customer = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) as total FROM customer"))['total'];
       $total_invoice = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) as total FROM invoice"))['total'];
-      $total_admin = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) as total FROM admin"))['total'];
       
-      // Get total sales (sum of invoice_total_bayar)
+      // Hitung total pendapatan (hanya dari invoice yang diproses/selesai status >= 3)
       $total_sales = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(invoice_total_bayar) as total FROM invoice WHERE invoice_status >= 3"))['total'] ?? 0;
       ?>
       
       <div class="stat-card-modern">
         <div class="stat-icon-modern"><i class="fa fa-leaf"></i></div>
         <div class="stat-value-modern"><?php echo number_format($total_produk); ?></div>
-        <div class="stat-label-modern">Total Produk</div>
-        <span class="trend-badge trend-up"><i class="fa fa-arrow-up"></i> +12%</span>
+        <div class="stat-label-modern">Total Stok Produk</div>
+        <span class="trend-badge trend-up"><i class="fa fa-cube"></i> Katalog Aktif</span>
       </div>
       
       <div class="stat-card-modern">
         <div class="stat-icon-modern"><i class="fa fa-users"></i></div>
         <div class="stat-value-modern"><?php echo number_format($total_customer); ?></div>
-        <div class="stat-label-modern">Pelanggan</div>
-        <span class="trend-badge trend-up"><i class="fa fa-arrow-up"></i> +5.6%</span>
+        <div class="stat-label-modern">Pelanggan Terdaftar</div>
+        <span class="trend-badge trend-up"><i class="fa fa-user"></i> Member</span>
       </div>
       
       <div class="stat-card-modern">
         <div class="stat-icon-modern"><i class="fa fa-shopping-cart"></i></div>
         <div class="stat-value-modern"><?php echo number_format($total_invoice); ?></div>
         <div class="stat-label-modern">Total Pesanan</div>
-        <span class="trend-badge trend-up"><i class="fa fa-arrow-up"></i> +8.2%</span>
+        <span class="trend-badge trend-up"><i class="fa fa-history"></i> Riwayat Order</span>
       </div>
       
       <div class="stat-card-modern">
         <div class="stat-icon-modern"><i class="fa fa-dollar"></i></div>
         <div class="stat-value-modern">Rp <?php echo number_format($total_sales); ?></div>
         <div class="stat-label-modern">Total Pendapatan</div>
-        <span class="trend-badge trend-up"><i class="fa fa-arrow-up"></i> +4.8%</span>
+        <span class="trend-badge trend-up"><i class="fa fa-check-circle"></i> Omzet Terverifikasi</span>
       </div>
     </div>
 
-    <!-- Charts Section -->
     <div class="charts-modern-row">
       <div class="chart-card">
         <div class="card-header-modern">
-          <h3><i class="fa fa-line-chart" style="color: #78B817; margin-right: 8px;"></i> Tren Penjualan</h3>
-          <span class="label label-success" style="background: #78B817;">2024</span>
+          <h3><i class="fa fa-line-chart" style="color: #78B817; margin-right: 8px;"></i> Tren Pendapatan Bulanan</h3>
+          <span class="label label-success" style="background: #78B817;"><?php echo date('Y'); ?></span>
         </div>
         <canvas id="salesChart" style="width: 100%; height: 260px;"></canvas>
       </div>
       
       <div class="chart-card pie-card">
         <div class="card-header-modern">
-          <h3><i class="fa fa-pie-chart" style="color: #78B817; margin-right: 8px;"></i> Status Pesanan</h3>
+          <h3><i class="fa fa-pie-chart" style="color: #78B817; margin-right: 8px;"></i> Distribusi Pesanan</h3>
         </div>
         <canvas id="statusChart" style="width: 100%; height: 220px;"></canvas>
-        <div style="margin-top: 16px; text-align: center; font-size: 0.7rem; color: #7f8c8d;">
-          <i class="fa fa-info-circle"></i> Distribusi status pesanan terkini
-        </div>
       </div>
     </div>
 
-    <!-- Recent Transactions -->
     <div class="table-modern-container">
       <div class="card-header-modern" style="margin-bottom: 16px;">
-        <h3><i class="fa fa-clock-o" style="color: #78B817;"></i> Transaksi Terbaru</h3>
+        <h3><i class="fa fa-clock-o" style="color: #78B817;"></i> 5 Transaksi Terakhir</h3>
         <a href="transaksi.php" class="btn-view-all"><i class="fa fa-arrow-right"></i> Lihat Semua</a>
       </div>
       
@@ -258,25 +240,26 @@
           </thead>
           <tbody>
             <?php
-            $recent_trans = mysqli_query($koneksi, "SELECT * FROM invoice ORDER BY invoice_id DESC LIMIT 5");
+            // Query JOIN untuk mendapatkan nama customer langsung
+            $recent_trans = mysqli_query($koneksi, "SELECT i.*, c.customer_nama 
+                                                   FROM invoice i 
+                                                   LEFT JOIN customer c ON i.invoice_customer = c.customer_id 
+                                                   ORDER BY i.invoice_id DESC LIMIT 5");
             if(mysqli_num_rows($recent_trans) > 0){
               while($inv = mysqli_fetch_assoc($recent_trans)){
-                $cust = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT customer_nama FROM customer WHERE customer_id='".$inv['invoice_customer']."'"));
-                $status_text = "";
-                $status_class = "";
+                $status_text = ""; $status_class = "";
                 switch($inv['invoice_status']){
                   case 0: $status_text = "Menunggu Bayar"; $status_class = "status-pending"; break;
-                  case 1: $status_text = "Menunggu Konfirmasi"; $status_class = "status-pending"; break;
-                  case 2: $status_text = "Ditolak"; $status_class = "status-pending"; break;
+                  case 1: $status_text = "Konfirmasi"; $status_class = "status-pending"; break;
+                  case 2: $status_text = "Ditolak"; $status_class = "status-cancelled"; break;
                   case 3: $status_text = "Diproses"; $status_class = "status-processing"; break;
-                  case 4: $status_text = "Dikirim"; $status_class = "status-processing"; break;
+                  case 4: $status_text = "Dikirim"; $status_class = "status-shipped"; break;
                   case 5: $status_text = "Selesai"; $status_class = "status-completed"; break;
-                  default: $status_text = "Unknown"; $status_class = "status-pending";
                 }
                 ?>
                 <tr>
                   <td><strong>INV-00<?php echo $inv['invoice_id']; ?></strong></td>
-                  <td><?php echo $cust['customer_nama'] ?? '-'; ?></td>
+                  <td><?php echo htmlspecialchars($inv['customer_nama'] ?? '-'); ?></td>
                   <td><?php echo date('d/m/Y', strtotime($inv['invoice_tanggal'])); ?></td>
                   <td>Rp <?php echo number_format($inv['invoice_total_bayar']); ?></td>
                   <td><span class="status-modern <?php echo $status_class; ?>"><?php echo $status_text; ?></span></td>
@@ -284,7 +267,7 @@
                 <?php
               }
             } else {
-              echo '<tr><td colspan="5" class="text-center">Belum ada transaksi</td></tr>';
+              echo '<tr><td colspan="5" class="text-center">Belum ada transaksi terbaru</td></tr>';
             }
             ?>
           </tbody>
@@ -292,31 +275,30 @@
       </div>
     </div>
 
-    <!-- Admin Info & Detail Login -->
     <div class="row" style="margin-top: 24px; padding: 0 8px;">
       <div class="col-md-6">
-        <div class="box box-success" style="border-radius: 20px; border-top-color: #78B817;">
+        <div class="box box-success" style="border-radius: 20px; border-top: 3px solid #78B817;">
           <div class="box-header with-border">
-            <h3 class="box-title" style="color: #2c3e50;"><i class="fa fa-user-circle"></i> Detail Login Admin</h3>
+            <h3 class="box-title" style="color: #2c3e50;"><i class="fa fa-user-circle"></i> Sesi Admin</h3>
           </div>
           <div class="box-body">
-            <table class="table table-borderless">
+            <table class="table table-condensed">
               <tr><th width="30%">Nama</th><td>: <?php echo $_SESSION['nama']; ?></td></tr>
               <tr><th>Username</th><td>: <?php echo $_SESSION['username']; ?></td></tr>
-              <tr><th>Level Akses</th><td>: <span class="label label-success" style="background: #78B817;"><?php echo $_SESSION['status']; ?></span></td></tr>
+              <tr><th>Akses</th><td>: <span class="label label-success" style="background: #78B817;"><?php echo $_SESSION['status']; ?></span></td></tr>
             </table>
           </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="box box-info" style="border-radius: 20px; border-top-color: #78B817;">
+        <div class="box box-info" style="border-radius: 20px; border-top: 3px solid #78B817;">
           <div class="box-header with-border">
-            <h3 class="box-title" style="color: #2c3e50;"><i class="fa fa-calendar"></i> Ringkasan Cepat</h3>
+            <h3 class="box-title" style="color: #2c3e50;"><i class="fa fa-calendar"></i> Summary</h3>
           </div>
           <div class="box-body">
-            <p><i class="fa fa-check-circle" style="color: #78B817;"></i> Total <?php echo $total_invoice; ?> pesanan telah diproses</p>
-            <p><i class="fa fa-trophy" style="color: #78B817;"></i> Pendapatan: Rp <?php echo number_format($total_sales); ?></p>
-            <p><i class="fa fa-smile-o" style="color: #78B817;"></i> <?php echo $total_customer; ?> pelanggan setia</p>
+            <p><i class="fa fa-check-circle" style="color: #78B817;"></i> Total <b><?php echo $total_invoice; ?></b> transaksi tercatat.</p>
+            <p><i class="fa fa-shopping-basket" style="color: #78B817;"></i> Tersedia <b><?php echo $total_produk; ?></b> item di gudang.</p>
+            <p><i class="fa fa-heart" style="color: #78B817;"></i> <b><?php echo $total_customer; ?></b> pelanggan telah bergabung.</p>
           </div>
         </div>
       </div>
@@ -327,7 +309,20 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-  // Sales Trend Chart
+  // Logic Mendapatkan Data Penjualan per Bulan dari DB untuk Chart
+  <?php
+  $monthly_sales = array_fill(1, 12, 0); // Buat array 12 bulan diisi 0
+  $sales_query = mysqli_query($koneksi, "SELECT MONTH(invoice_tanggal) as bulan, SUM(invoice_total_bayar) as total 
+                                        FROM invoice 
+                                        WHERE YEAR(invoice_tanggal) = YEAR(CURDATE()) AND invoice_status >= 3 
+                                        GROUP BY MONTH(invoice_tanggal)");
+  while($row = mysqli_fetch_assoc($sales_query)){
+      $monthly_sales[(int)$row['bulan']] = (int)$row['total'];
+  }
+  $sales_js_data = implode(',', $monthly_sales);
+  ?>
+
+  // Sales Trend Chart (Line)
   const ctx = document.getElementById('salesChart').getContext('2d');
   new Chart(ctx, {
     type: 'line',
@@ -335,55 +330,51 @@
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
       datasets: [{
         label: 'Pendapatan (Rp)',
-        data: [12500000, 14800000, 13200000, 16800000, 19200000, 21500000, 23800000, 25600000, 27800000, 29500000, 31200000, 33500000],
+        data: [<?php echo $sales_js_data; ?>],
         borderColor: '#78B817',
-        backgroundColor: 'rgba(120, 184, 23, 0.05)',
+        backgroundColor: 'rgba(120, 184, 23, 0.1)',
         borderWidth: 3,
-        pointRadius: 4,
-        pointBackgroundColor: '#78B817',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        tension: 0.3,
+        tension: 0.4,
         fill: true,
+        pointBackgroundColor: '#78B817',
+        pointRadius: 4
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
       plugins: {
-        legend: { position: 'top', labels: { usePointStyle: true, font: { family: 'Poppins', size: 11 } } },
+        legend: { display: false },
         tooltip: { callbacks: { label: (ctx) => `Rp ${ctx.raw.toLocaleString()}` } }
       },
       scales: {
-        y: { ticks: { callback: (val) => 'Rp ' + (val/1000000).toFixed(1) + 'jt' }, grid: { color: '#eef2f0' } }
+        y: { beginAtZero: true, grid: { color: '#f0f3f2' } },
+        x: { grid: { display: false } }
       }
     }
   });
 
   // Status Pie Chart
-  const pieCtx = document.getElementById('statusChart').getContext('2d');
   <?php
-  $status_count = [];
-  for($i=0;$i<=5;$i++) $status_count[$i] = 0;
-  $status_query = mysqli_query($koneksi, "SELECT invoice_status, COUNT(*) as total FROM invoice GROUP BY invoice_status");
-  while($row = mysqli_fetch_assoc($status_query)) $status_count[$row['invoice_status']] = $row['total'];
+  $st_count = array_fill(0, 6, 0);
+  $st_query = mysqli_query($koneksi, "SELECT invoice_status, COUNT(*) as total FROM invoice GROUP BY invoice_status");
+  while($row = mysqli_fetch_assoc($st_query)) $st_count[$row['invoice_status']] = $row['total'];
   ?>
+  const pieCtx = document.getElementById('statusChart').getContext('2d');
   new Chart(pieCtx, {
     type: 'doughnut',
     data: {
-      labels: ['Menunggu Bayar', 'Menunggu Konfirmasi', 'Ditolak', 'Diproses', 'Dikirim', 'Selesai'],
+      labels: ['Menunggu Bayar', 'Konfirmasi', 'Ditolak', 'Diproses', 'Dikirim', 'Selesai'],
       datasets: [{
-        data: [<?php echo $status_count[0].','.$status_count[1].','.$status_count[2].','.$status_count[3].','.$status_count[4].','.$status_count[5]; ?>],
+        data: [<?php echo implode(',', $st_count); ?>],
         backgroundColor: ['#f39c12', '#95a5a6', '#e74c3c', '#3498db', '#9b59b6', '#27ae60'],
         borderWidth: 0,
-        cutout: '55%',
+        cutout: '60%',
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
       plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } }
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
       }
     }
   });
